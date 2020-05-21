@@ -36,6 +36,8 @@ module "tfe_vm" {
   azure_client_id                 = "..."
   azure_client_secret             = "..."
 
+  license_file_name = "yourcompany.rli"
+
   names = module.tfe_metadata.names
   tags  = module.tfe_metadata.tags
 }

@@ -183,6 +183,7 @@ commands will detect it and remind you to do so if necessary.
     1. `vm_public_key`: the name of the secret containing the SSH public key to install in the VM's `~/.ssh/authorized_keys` file
     1. `azure_client_id`: the name of the secret containing the Service Principal ID
     1. `azure_client_secret`: the name of the secret containing the secret associated with the Service Principal
+    1. `license_file_name`: the name of the license file that you uploaded to the blob container during the second phase of the setup earlier
 1. You should be done here, so save your changes to `tfe.tf`.
 1. Run `terraform apply` and type `yes` when prompted. This will take a few minutes but should complete without incident.
 1. By the time Terraform returns, you should be able to SSH into the VM, or will be able to shortly. You can try the FQDN first, and if it doesn't resolve yet, you can obtain the VM's public IP address through the Azure Portal, or query the Terraform state, for example. There's not much reason to SSH in at this point, unless you're already familiar with the automated steps that happen after the VM starts and you want to watch things "live". Otherwise, skip to the next step.
