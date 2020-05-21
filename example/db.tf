@@ -1,5 +1,5 @@
 module "tfe_postgres_db" {
-  source = "https://github.com/LexisNexis-Terraform/terraform-azurerm-terraform-enterprise-instance.git//db?ref=v0.1.0"
+  source = "github.com/Azure-Terraform/terraform-azurerm-terraform-enterprise-instance//db?ref=v0.1.0"
 
   resource_group_name   = module.tfe_rg.name
   location              = module.tfe_rg.location
