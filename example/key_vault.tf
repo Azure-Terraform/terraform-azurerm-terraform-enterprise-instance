@@ -1,5 +1,5 @@
 module "tfe_key_vault" {
-  source = "https://github.com/LexisNexis-Terraform/terraform-azurerm-terraform-enterprise-instance.git//key_vault?ref=v0.1.0"
+  source = "github.com/Azure-Terraform/terraform-azurerm-terraform-enterprise-instance//key_vault?ref=v0.1.0"
 
   resource_group_name = module.tfe_rg.name
   location            = module.tfe_rg.location

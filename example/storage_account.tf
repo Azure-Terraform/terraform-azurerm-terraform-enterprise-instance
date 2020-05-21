@@ -1,5 +1,5 @@
 module "tfe_storage_blob" {
-  source = "https://github.com/LexisNexis-Terraform/terraform-azurerm-terraform-enterprise-instance.git//storage_blob?ref=v0.1.0"
+  source = "github.com/Azure-Terraform/terraform-azurerm-terraform-enterprise-instance//storage_blob?ref=v0.1.0"
 
   resource_group_name = module.tfe_rg.name
   location            = module.tfe_rg.location

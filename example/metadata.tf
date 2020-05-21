@@ -1,5 +1,5 @@
 module "tfe_metadata" {
-  source = "https://github.com/LexisNexis-Terraform/terraform-azurerm-metadata.git?ref=v1.0.0"
+  source = "github.com/Azure-Terraform/terraform-azurerm-metadata?ref=v1.0.0"
 
   business_unit       = "..."
   cost_center         = "..."

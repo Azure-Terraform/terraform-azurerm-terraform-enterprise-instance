@@ -1,5 +1,5 @@
 module "tfe_vnet" {
-  source = "https://github.com/LexisNexis-Terraform/terraform-azurerm-terraform-enterprise-instance.git//virtual_network?ref=v0.1.0"
+  source = "github.com/Azure-Terraform/terraform-azurerm-terraform-enterprise-instance//virtual_network?ref=v0.1.0"
 
   resource_group_name = module.tfe_rg.name
   location            = module.tfe_rg.location
