@@ -53,34 +53,32 @@ resource "azurerm_linux_virtual_machine" "tfe" {
     disk_size_gb          = var.vm_os_disk_size
   }
 
+  # Variables are listed in the order in which they appear in the custom data script
   custom_data = base64encode(templatefile("${path.module}/template_vm_custom_data.sh.tpl",{
     timezone = var.timezone
-    application_settings_json = data.template_file.application_settings_json.rendered
-    hostname = var.tfe_hostname
-    replicated_conf = data.template_file.replicated_conf.rendered
-    replicated_console_password = var.replicated_console_password
     app_settings_path = local.tfe_application_settings_json_path
-    license_file_name = var.license_file_name
+    application_settings_json = data.template_file.application_settings_json.rendered
+    replicated_conf = data.template_file.replicated_conf.rendered
+    username = var.vm_username
+    vanity_hostname_dns_zone_subscription_id = var.tfe_vanity_hostname_dns_zone_subscription_id
+    azure_tenant_id = data.azurerm_client_config.current.tenant_id
     key_vault_name = data.azurerm_key_vault.main.name
     key_vault_uri = data.azurerm_key_vault.main.vault_uri
-    azure_account_name = var.storage_account_name
-    azure_container = var.storage_account_blob_container
-    azure_files_endpoint = var.storage_account_files_endpoint
-    azure_files_share = azurerm_storage_share.snapshots.name
-    pg_username = var.pg_admin_user
-    pg_password = var.pg_admin_password
-    username = var.vm_username
-    azure_tenant_id = data.azurerm_client_config.current.tenant_id
-    azure_subscription_id = data.azurerm_client_config.current.subscription_id
     azure_client_id = var.azure_client_id
     azure_client_secret = var.azure_client_secret
+    hostname = var.tfe_hostname
+    vanity_hostname = var.tfe_vanity_hostname
+    replicated_console_password = var.replicated_console_password
+    azure_account_name = var.storage_account_name
+    pg_username = var.pg_admin_user
+    pg_password = var.pg_admin_password
+    azure_container = var.storage_account_blob_container
+    license_file_name = var.license_file_name
     public_ip = azurerm_public_ip.vm.ip_address
     snapshots_path = local.tfe_snapshots_path
+    azure_files_endpoint = var.storage_account_files_endpoint
+    azure_files_share = azurerm_storage_share.snapshots.name
   }))
-
-  lifecycle {
-    ignore_changes = [custom_data]
-  }
 
   identity {
     type = "SystemAssigned"
