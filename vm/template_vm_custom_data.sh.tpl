@@ -51,13 +51,13 @@ cd /home/${username}/acme-sh-install
 ./acme.sh --install --home /home/${username}/.acme.sh
 chown -R ${username}:${username} /home/${username}/.acme.sh
 
-export AZUREDNS_SUBSCRIPTIONID="${azure_subscription_id}"
+export AZUREDNS_SUBSCRIPTIONID="${vanity_hostname_dns_zone_subscription_id}"
 export AZUREDNS_TENANTID="${azure_tenant_id}"
 export AZUREDNS_APPID=$(az keyvault secret show --vault-name ${key_vault_name} --id "${key_vault_uri}secrets/${azure_client_id}" | jq -r '.value')
 export AZUREDNS_CLIENTSECRET=$(az keyvault secret show --vault-name ${key_vault_name} --id "${key_vault_uri}secrets/${azure_client_secret}" | jq -r '.value')
 
 cd /home/${username}/.acme.sh
-./acme.sh --home /home/${username}/.acme.sh --issue --dns dns_azure -d ${hostname}
+./acme.sh --home /home/${username}/.acme.sh --issue --dns dns_azure -d ${hostname} -d ${vanity_hostname}
 
 # Get the secrets we need to insert in the replicated settings JSON file
 ADMIN_UI_PASSWORD=$(az keyvault secret show --vault-name ${key_vault_name} --id "${key_vault_uri}secrets/${replicated_console_password}" | jq -r '.value')

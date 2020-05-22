@@ -47,6 +47,16 @@ variable "tfe_hostname" {
   description = "The FQDN of the TFE server"
 }
 
+variable "tfe_vanity_hostname" {
+  type = string
+  description = "A vanity DNS alias, e.g. tfe-prod.lnrisk.io"
+}
+
+variable "tfe_vanity_hostname_dns_zone_subscription_id" {
+  type = string
+  description = "The subscription ID where the vanity domain resides. This is probably different from the subscription where you're setting up TFE."
+}
+
 variable "dns_zone_resource_group" {
   type = string
   description = "The resource group containing the Azure DNS zone where the DNS record for TFE will reside. This may or may not be the same resource group that you're using for TFE itself."
