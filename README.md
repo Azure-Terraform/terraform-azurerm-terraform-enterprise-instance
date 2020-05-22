@@ -52,7 +52,6 @@ The VM runs Ubuntu 18.04 LTS since CentOS 7 is not supported by HashiCorp.
     "Microsoft.Network/dnsZones/TXT/*", 
     "Microsoft.Network/dnsZones/read", 
     "Microsoft.Authorization/*/read", 
-    "Microsoft.Insights/alertRules/*", 
     "Microsoft.ResourceHealth/availabilityStatuses/read", 
     "Microsoft.Resources/deployments/read", 
     "Microsoft.Resources/subscriptions/resourceGroups/read" 
@@ -65,7 +64,7 @@ The VM runs Ubuntu 18.04 LTS since CentOS 7 is not supported by HashiCorp.
 }
 ```
 
-**Note**: the Service Principal needs access to the subscription that contains the DNS zone where the TFE record will be created. This may or may not be the same subscription that contains TFE itself, so be mindful of that when setting up the permissions of the Service Principal.
+**Note**: the Service Principal needs access to the subscription that contains the DNS zone where the TFE **vanity** record will be created. This is probably **not** the same subscription that contains TFE itself, so be mindful of that when setting up the permissions of the Service Principal.
 
 ## Setup overview
 
@@ -174,6 +173,8 @@ commands will detect it and remind you to do so if necessary.
     1. `admin_password`: earlier, you stored an admin password for the Postgres instance in Key Vault. This variable must be set to the **name of the Key Vault secret** containing the password you set, **not the password itself**.
 1. In the directory of examples, open `vm.tf` and copy-paste its contents into your `tfe.tf`. There are a number of things you must edit here.
     1. `tfe_hostname`: the fully-qualified domain name you want to assign to TFE.
+    1. `tfe_vanity_hostname`: a vanity domain name, for example `tfe_hostname` might be something ugly like `app.tfe.nonprod.us.lnrisk.io`, and this could be `tfe-dev.lnrisk.io`.
+    1. `tfe_vanity_hostname_dns_zone_subscription_id`: the subscription ID where resides the DNS zone that will contain the vanity record. This is most likely a subscription ID different from the one where you are setting up TFE. **Your Service Principal must have access to read/write/delete TXT records in this subscription.**
     1. `dns_zone_resource_group`: the name of the resource group that owns the DNS zone where the DNS records for TFE must be created. This is probably not the same resource group as the one you created in an earlier step.
     1. `vm_size`: we've spent considerable time running performance tests against various Azure VM types and came to the conclusion that the [Das v4-series](https://azure.microsoft.com/en-us/updates/new-azure-dav4-series-and-eav4-seriesvirtual-machines-are-now-available/) are best suited for running TFE. Note that Hashicorp recommends [Dv3](https://azure.microsoft.com/en-us/blog/introducing-the-new-dv3-and-ev3-vm-sizes/) VM sizes ([link](https://www.terraform.io/docs/enterprise/before-installing/reference-architecture/azure.html)), but we've proved that they perform worse than Da/Das v4 VMs while costing the same. You should use an instance type of `Standard_D4as_v4` (4 CPU cores, 16 GB RAM) as a minimum, and increase to the next SKU, `Standard_D8as_v4` (8 CPU cores, 32 GB RAM) if needed (probably will be needed for a Prod deployment). Since larger instances cost double, you should do your due diligence and monitor CPU/RAM utilization, and only use a larger instance if monitoring shows it to be a necessity. Just don't use Azure Av2 or Bs instance types here.
     1. `vm_os_disk_size`: this defaults to 128, which should be ample according to HashiCorp, who recommends a minimum of 50 GB. If you change this value, you should make sure it's an integral power of 2 (32, 64, 128, 256, etc.), due to Azure billing considerations (Azure disks are priced by tier, and for example a 50 GB disk is billed at the next tier level, 64 in this case).
@@ -190,6 +191,8 @@ commands will detect it and remind you to do so if necessary.
 1. After a few minutes, go to http://tfe_hostname:8800. This is the TFE admin console. If it doesn't work yet, wait a few more minutes and try again. Once that UI is up, it should ask for a password that you created earlier and should have written down. Once you're in, you can go through all the settings and double check that everything is set correctly. One thing you may want to adjust now or later is the snapshot settings, i.e. whether to take daily snapshots automatically, how many to retain, etc. This is not currently configurable through automation.
 1. Refer to [this link](https://www.terraform.io/docs/enterprise/install/config.html) for this step. If this is a clean install/new TFE instance, the first thing you need to do is create an admin account. Follow the instructions in the link to do this. You can also follow [these instructions](https://www.terraform.io/docs/enterprise/install/automating-initial-user.html) to set up the first admin user via an API, but this method only works for 60 minutes after TFE starts, for security reasons.
 1. You should now be able to log in to TFE at https://tfe_hostname using the admin account you created.
+1. Have someone who has access to the vanity DNS zone create a CNAME for the value you specified in the `tfe_vanity_hostname` variable earlier, and point the CNAME to what you set in the `tfe_hostname` variable. If you have access to do this yourself, do so. This step was not included in the Terraform code due to complexities associated with running a single code base against more than one Azure subscription.
+1. Make sure https://tfe_vanity_hostname is working and the SSL cert includes the vanity alias.
 
 If you've reached this step and had no issues, you're done and can now start using TFE. Refer to the [official docs](https://www.terraform.io/docs/enterprise/index.html) for all your needs, and [open a support ticket](https://support.hashicorp.com/hc/en-us) with HashiCorp as needed. Their support is great and responsive.
 
