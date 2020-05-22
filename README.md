@@ -225,9 +225,15 @@ When you've done all that, the state file will be maintained securely and redund
 
 By the way, you can do this at any time after the storage account is created (first phase of the setup steps above), or you could use another storage account/blob from the start, if one is available to you.
 
-## Upgrades
+## Maintenance/Upgrades
+
+### Application
 
 Application upgrades must be handled within the application, not with Terraform. It's a straightforward, automated process, documented [here](https://www.terraform.io/docs/enterprise/admin/upgrades.html).
+
+### Operating System
+
+As mentioned earlier, the VM is running Ubuntu 18.04. Special care should be taken when installing OS updates. Terraform Enterprise expects a specific version of Docker, which is tied to the version of TFE you're running. Therefore, when patching the OS, you should be careful not to upgrade any Docker packages without first consulting HashiCorp and making sure the Docker upgrade is supported by the current version of TFE, or check if a newer version of TFE is available that supports the newer version of Docker you're aiming to install.
 
 ## Logging & Monitoring
 
