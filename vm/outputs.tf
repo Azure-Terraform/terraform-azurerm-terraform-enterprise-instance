@@ -5,3 +5,11 @@ output "public_ip" {
 output "fqdn" {
   value = var.tfe_hostname
 }
+
+output "application_security_group_name" {
+  value = azurerm_application_security_group.main.name
+}
+
+output "application_security_group_id" {
+  value = azurerm_application_security_group.main.id
+}
