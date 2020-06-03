@@ -64,6 +64,27 @@ resource "azurerm_network_interface_application_security_group_association" "adm
   application_security_group_id = azurerm_application_security_group.admin.id
 }
 
+#
+# INBOUND RULES
+#
+
+# Ensure TFE is allowed to connect to itself
+resource "azurerm_network_security_rule" "inbound-tfe-self" {
+  name  = "inbound-tfe-self"
+
+  resource_group_name = var.resource_group_name
+  network_security_group_name = var.tfe_subnet_nsg
+
+  priority                                    = 480
+  direction                                   = "Inbound"
+  access                                      = "Allow"
+  protocol                                    = "Tcp"
+  source_address_prefixes                     = ["${azurerm_public_ip.vm.ip_address}/32"]
+  source_port_range                           = "*"
+  destination_application_security_group_ids  = [azurerm_application_security_group.main.id]
+  destination_port_ranges                     = ["80","443"]
+}
+
 # List of IP addresses allowed to connect to TFE instance
 resource "azurerm_network_security_rule" "inbound-tfe-direct" {
   name  = "inbound-tfe-direct"
