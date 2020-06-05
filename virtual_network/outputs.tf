@@ -14,6 +14,14 @@ output "subnet_id" {
   value = azurerm_subnet.main.id
 }
 
+output "vault_subnet_name" {
+  value = azurerm_subnet.vault.name
+}
+
+output "vault_subnet_id" {
+  value = azurerm_subnet.vault.id
+}
+
 output "subnet_nsg_name" {
   value = azurerm_network_security_group.main.name
 }
