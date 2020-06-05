@@ -13,7 +13,7 @@ resource "azurerm_key_vault" "main" {
     default_action              = "Deny"
     bypass                      = "AzureServices"
     ip_rules                    = local.ip_whitelist
-    virtual_network_subnet_ids  = list(var.tfe_subnet)
+    virtual_network_subnet_ids  = list(var.tfe_subnet, var.vault_subnet)
   }
 
   tags = var.tags

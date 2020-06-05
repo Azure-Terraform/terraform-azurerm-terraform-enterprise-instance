@@ -21,6 +21,11 @@ variable "tfe_subnet" {
   description = "The ID of the subnet where the TFE instance lives."
 }
 
+variable "vault_subnet" {
+  type = string
+  description = "The ID of the subnet where the Vault instance lives."
+}
+
 variable "name_randomness" {
   type = number
   description = "An arbitrary number that is used to 'randomize' the hostname of the Key Vault, you need to set this to any number between 0 and 255"

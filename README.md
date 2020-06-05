@@ -11,8 +11,8 @@ So while this code may not be as reusable as your typical Terraform module, its 
 The code in this repository creates a number of things:
 
 1. An Azure Resource Group to contain all the other resources.
-1. An Azure Virtual Network with one subnet.
-1. An Azure Key Vault. This will only store a few small things: the storage account keys, the Postgres database user and password, and the SSL cert for TFE and associated private key. This is NOT used by TFE directly.
+1. An Azure Virtual Network with two subnets, one for TFE, one for an optional instance of HashiCorp Vault. The latter will remain empty and unused unless you use the Terraform code to "append" this instance of Vault to your TFE implementation. The code is available in a separate repository, and includes separate documentation.
+1. An Azure Key Vault. This will only store a few small things: the storage account keys, the Postgres database user and password, and a few other secrets. This is NOT used by TFE directly, only to bring up TFE and its database.
 1. An Azure Storage Account with a Blob container and a Files endpoint. The Blob container will hold the TFE license file as well as some of the TFE application data. The Files endpoint is a CIFS share that is mounted to the VM. TFE will store its application snapshots there.
 1. A PostgreSQL database instance. By default, only TFE will be able to connect to the DB. You can configure the database firewall to allow connections from your workstation if needed. This should be avoided except for troubleshooting, and is done outside of this module (an example is provided farther down).
 1. An Azure VM for the TFE application. This VM is assigned a managed identity allowing it to download required secrets from Key Vault.
