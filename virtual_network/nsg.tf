@@ -178,3 +178,20 @@ resource "azurerm_network_security_rule" "outbound-http-to-internet" {
   destination_address_prefix  = "Internet"
   destination_port_ranges     = ["80","443"]
 }
+
+# Allow outbound SMTP to the Internet
+resource "azurerm_network_security_rule" "outbound-smtp-to-internet" {
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.main.name
+
+  name = "outbound-smtp-to-internet"
+
+  priority                    = 510
+  direction                   = "Outbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_address_prefix       = "VirtualNetwork"
+  source_port_range           = "*"
+  destination_address_prefix  = "Internet"
+  destination_port_range      = "587"
+}
