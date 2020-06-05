@@ -136,3 +136,83 @@ resource "azurerm_network_security_rule" "inbound-github-hooks" {
   destination_application_security_group_ids  = [azurerm_application_security_group.main.id]
   destination_port_range                      = "443"
 }
+
+resource "azurerm_network_security_rule" "inbound-github-actions-eastus" {
+  name  = "inbound-github-actions-eastus"
+
+  resource_group_name = var.resource_group_name
+  network_security_group_name = var.tfe_subnet_nsg
+
+  priority                                    = 520
+  direction                                   = "Inbound"
+  access                                      = "Allow"
+  protocol                                    = "Tcp"
+  source_address_prefix                       = "AzureCloud.eastus"
+  source_port_range                           = "*"
+  destination_application_security_group_ids  = [azurerm_application_security_group.main.id]
+  destination_port_range                      = "443"
+}
+
+resource "azurerm_network_security_rule" "inbound-github-actions-eastus2" {
+  name  = "inbound-github-actions-eastus2"
+
+  resource_group_name = var.resource_group_name
+  network_security_group_name = var.tfe_subnet_nsg
+
+  priority                                    = 521
+  direction                                   = "Inbound"
+  access                                      = "Allow"
+  protocol                                    = "Tcp"
+  source_address_prefix                       = "AzureCloud.eastus2"
+  source_port_range                           = "*"
+  destination_application_security_group_ids  = [azurerm_application_security_group.main.id]
+  destination_port_range                      = "443"
+}
+
+resource "azurerm_network_security_rule" "inbound-github-actions-westus2" {
+  name  = "inbound-github-actions-westus2"
+
+  resource_group_name = var.resource_group_name
+  network_security_group_name = var.tfe_subnet_nsg
+
+  priority                                    = 522
+  direction                                   = "Inbound"
+  access                                      = "Allow"
+  protocol                                    = "Tcp"
+  source_address_prefix                       = "AzureCloud.westus2"
+  source_port_range                           = "*"
+  destination_application_security_group_ids  = [azurerm_application_security_group.main.id]
+  destination_port_range                      = "443"
+}
+
+resource "azurerm_network_security_rule" "inbound-github-actions-centralus" {
+  name  = "inbound-github-actions-centralus"
+
+  resource_group_name = var.resource_group_name
+  network_security_group_name = var.tfe_subnet_nsg
+
+  priority                                    = 523
+  direction                                   = "Inbound"
+  access                                      = "Allow"
+  protocol                                    = "Tcp"
+  source_address_prefix                       = "AzureCloud.centralus"
+  source_port_range                           = "*"
+  destination_application_security_group_ids  = [azurerm_application_security_group.main.id]
+  destination_port_range                      = "443"
+}
+
+resource "azurerm_network_security_rule" "inbound-github-actions-southcentralus" {
+  name  = "inbound-github-actions-southcentralus"
+
+  resource_group_name = var.resource_group_name
+  network_security_group_name = var.tfe_subnet_nsg
+
+  priority                                    = 524
+  direction                                   = "Inbound"
+  access                                      = "Allow"
+  protocol                                    = "Tcp"
+  source_address_prefix                       = "AzureCloud.southcentralus"
+  source_port_range                           = "*"
+  destination_application_security_group_ids  = [azurerm_application_security_group.main.id]
+  destination_port_range                      = "443"
+}
