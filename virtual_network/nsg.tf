@@ -3,7 +3,7 @@ resource "azurerm_network_security_group" "main" {
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  tags = merge(var.tags, {subnet_type = "iaas-public"})
+  tags = merge(var.tags, {"subnet_type" = "iaas-public"})
 }
 
 resource "azurerm_subnet_network_security_group_association" "main" {
