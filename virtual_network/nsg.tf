@@ -3,7 +3,7 @@ resource "azurerm_network_security_group" "main" {
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  tags = merge(var.tags, {subnet_type = "iaas-public"})
+  tags = merge(var.tags, {"subnet_type" = "iaas-public"})
 }
 
 resource "azurerm_subnet_network_security_group_association" "main" {
@@ -194,4 +194,21 @@ resource "azurerm_network_security_rule" "outbound-smtp-to-internet" {
   source_port_range           = "*"
   destination_address_prefix  = "Internet"
   destination_port_range      = "587"
+}
+
+# Allow outbound NTP to the Internet
+resource "azurerm_network_security_rule" "outbound-ntp-to-internet" {
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.main.name
+
+  name = "outbound-ntp-to-internet"
+
+  priority                    = 520
+  direction                   = "Outbound"
+  access                      = "Allow"
+  protocol                    = "Udp"
+  source_address_prefix       = "VirtualNetwork"
+  source_port_range           = "*"
+  destination_address_prefix  = "Internet"
+  destination_port_range      = "123"
 }
